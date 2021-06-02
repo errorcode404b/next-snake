@@ -134,7 +134,6 @@ export default function Home() {
 
   return (
     <Stack alignItems="center" justifyContent="center" minHeight="100vh">
-      <Heading>{direction}</Heading>
       <Flex alignItems="center">
         <SimpleGrid
           columns={10}
