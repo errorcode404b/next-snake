@@ -14,32 +14,42 @@ const backgroundColorMap = {
   fruit: "red",
 };
 
+const INITIAL_DIRECTION = "ArrowRight";
+const INITIAL_IS_PLAYING = false;
+const INITIAL_GAME_OVER = false;
+const INITIAL_SNAKE = [0, 1, 2];
+const INITIAL_SCORE = 0;
+const INITIAL_TIME_DELAY = 1000;
+const GAMEBOARD_WIDTH = 10;
+const CELL_WIDTH = 50;
+
 const directionMap = {
   ArrowRight: 1,
   ArrowLeft: -1,
-  ArrowDown: 10,
-  ArrowUp: -10,
+  ArrowDown: GAMEBOARD_WIDTH,
+  ArrowUp: -GAMEBOARD_WIDTH,
 };
 
 const createGameboard = () => {
-  const gameboard = ["snake", "snake", "snake"];
-  for (let i = 3; i < 100; i++) {
+  const gameboard = [];
+  for (let i = 0; i < GAMEBOARD_WIDTH * GAMEBOARD_WIDTH; i++) {
     gameboard.push("cell");
   }
+  INITIAL_SNAKE.forEach((snake) => (gameboard[snake] = "snake"));
   gameboard[58] = "fruit";
   return gameboard;
 };
 
 export default function Home() {
   const [gameboard, setGameboard] = useState(createGameboard());
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [direction, setDirection] = useState("ArrowRight");
-  const [snake, setSnake] = useState([0, 1, 2]);
-  const [gameOver, setGameOver] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(INITIAL_IS_PLAYING);
+  const [direction, setDirection] = useState(INITIAL_DIRECTION);
+  const [snake, setSnake] = useState(INITIAL_SNAKE);
+  const [gameOver, setGameOver] = useState(INITIAL_GAME_OVER);
   const timeoutId = useRef();
-  const score = useRef(0);
-  const time = useRef(1000);
-  const previousDirection = useRef("ArrowRight");
+  const score = useRef(INITIAL_SCORE);
+  const time = useRef(INITIAL_TIME_DELAY);
+  const previousDirection = useRef(INITIAL_DIRECTION);
 
   const handleKeydown = useCallback((evt) => {
     if (directionMap[evt.key]) {
@@ -53,15 +63,15 @@ export default function Home() {
   };
 
   const resetGame = () => {
-    score.current = 0;
-    time.current = 1000;
+    score.current = INITIAL_SCORE;
+    time.current = INITIAL_TIME_DELAY;
     clearTimeout(timeoutId.current);
-    setIsPlaying(false);
+    setIsPlaying(INITIAL_IS_PLAYING);
     setGameboard(createGameboard());
-    setDirection("ArrowRight");
-    setSnake([0, 1, 2]);
-    setGameOver(false);
-    previousDirection.current = "ArrowRight";
+    setDirection(INITIAL_DIRECTION);
+    setSnake(INITIAL_SNAKE);
+    setGameOver(INITIAL_GAME_OVER);
+    previousDirection.current = INITIAL_DIRECTION;
     window.removeEventListener("keydown", handleKeydown);
   };
 
@@ -87,12 +97,12 @@ export default function Home() {
     }
 
     // game over when snake crosses the border.
-    if (direction === "ArrowRight" && newHead % 10 === 0) {
+    if (direction === "ArrowRight" && newHead % GAMEBOARD_WIDTH === 0) {
       setGameOver(true);
       return;
     }
 
-    if (direction === "ArrowLeft" && (newHead + 1) % 10 === 0) {
+    if (direction === "ArrowLeft" && (newHead + 1) % GAMEBOARD_WIDTH === 0) {
       setGameOver(true);
       return;
     }
@@ -136,16 +146,16 @@ export default function Home() {
     <Stack alignItems="center" justifyContent="center" minHeight="100vh">
       <Flex alignItems="center">
         <SimpleGrid
-          columns={10}
+          columns={GAMEBOARD_WIDTH}
           spacing={0}
-          width="500px"
+          width={`${GAMEBOARD_WIDTH * CELL_WIDTH}px`}
           border="1px solid"
           borderColor={gameOver && "red"}
         >
           {gameboard.map((item, index) => (
             <Box
-              width="50px"
-              height="50px"
+              width={`${CELL_WIDTH}px`}
+              height={`${CELL_WIDTH}px`}
               background={backgroundColorMap[item]}
               key={index}
             />
