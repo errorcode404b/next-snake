@@ -8,6 +8,8 @@ import {
   Flex,
 } from "@chakra-ui/react";
 
+import styles from './Button.module.css'
+
 const backgroundColorMap = {
   cell: "transparent",
   snake: "green",
@@ -166,12 +168,12 @@ export default function Home() {
         </Heading>
       </Flex>
       {!isPlaying && (
-        <Button size="lg" onClick={startGame}>
+        <Button size="lg" className={styles.btn1} onClick={startGame}>
           Start
         </Button>
       )}
       {isPlaying && (
-        <Button size="lg" onClick={resetGame}>
+        <Button size="lg" className={styles.btn2} onClick={resetGame}>
           Reset
         </Button>
       )}
