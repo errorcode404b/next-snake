@@ -8,8 +8,6 @@ import {
   Flex,
 } from "@chakra-ui/react";
 
-import styles from './style.module.css'
-
 const backgroundColorMap = {
   cell: "transparent",
   snake: "green",
